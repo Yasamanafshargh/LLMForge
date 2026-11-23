@@ -512,3 +512,10 @@ LLMForge از دو بخش اصلی تشکیل شده است:
 **LLMForge --- From raw text to structured language-model data.**
 
 **LLMForge --- از متن خام تا داده ساخت‌یافته برای مدل‌های زبانی.**
+
+
+## Screenshots
+![LLMForge Studio Dashboard](screenshots/1.png)
+![LLMForge Studio Dashboard](screenshots/2.png)
+![LLMForge Studio Dashboard](screenshots/3.png)
+![LLMForge Studio Dashboard](screenshots/4.png)
