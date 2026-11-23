@@ -1,0 +1,90 @@
+
+{% extends "dashboard_app/base.html" %}
+
+{% block content %}
+
+<div class="dataset-page-header">
+    <div class="dataset-header-text">
+        <h1>Dataset Explorer</h1>
+        <p class="page-description">
+            Manage and inspect datasets available in LLMForge Studio.
+        </p>
+    </div>
+
+    <a href="{% url 'dataset_upload' %}" class="primary-button dataset-upload-button">
+        <span>+</span>
+        Upload Dataset
+    </a>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-label">Total Datasets</span>
+        <h2>{{ datasets|length }}</h2>
+    </div>
+</div>
+
+<div class="content-card">
+    <div class="section-heading">
+        <h2>Available Datasets</h2>
+        <p>Your uploaded research datasets.</p>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Dataset Name</th>
+                    <th>Format</th>
+                    <th>Documents</th>
+                    <th>Uploaded</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for dataset in datasets %}
+                    <tr>
+                        <td>
+                            <strong>{{ dataset.name }}</strong>
+                            <div class="table-description">
+                                {{ dataset.description|default:"No description" }}
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="format-badge">
+                                {{ dataset.file_format|upper }}
+                            </span>
+                        </td>
+
+                        <td>{{ dataset.document_count }}</td>
+
+                        <td>{{ dataset.created_at|date:"M d, Y" }}</td>
+
+                        <td>
+                            <a
+                                href="{% url 'dataset_detail' dataset.id %}"
+                                class="table-link"
+                            >
+                                Inspect →
+                            </a>
+                        </td>
+                    </tr>
+
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            No datasets uploaded yet.
+                            <a href="{% url 'dataset_upload' %}">
+                                Upload your first dataset
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,5 @@
+Machine learning is a fascinating field.
+
+Language models learn patterns from text.
+Large language models use neural networks
+to process and generate language.

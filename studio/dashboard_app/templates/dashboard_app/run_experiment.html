@@ -1,0 +1,60 @@
+
+{% extends "dashboard_app/base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Run Experiment</h1>
+        <p>Configure and execute an LLMForge preprocessing pipeline.</p>
+    </div>
+</div>
+
+<div class="content-card experiment-form-card">
+    <div class="card-header">
+        <div>
+            <h2>Experiment Configuration</h2>
+            <p>Choose your dataset and preprocessing pipeline.</p>
+        </div>
+    </div>
+
+    <form method="POST" class="experiment-form">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="form-errors">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="form-field">
+            <label for="{{ form.name.id_for_label }}">Experiment Name</label>
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.dataset.id_for_label }}">Dataset</label>
+            {{ form.dataset }}
+            {{ form.dataset.errors }}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.pipeline_type.id_for_label }}">Preprocessing Pipeline</label>
+            {{ form.pipeline_type }}
+            {{ form.pipeline_type.errors }}
+        </div>
+
+        <div class="experiment-actions">
+            <a href="{% url 'experiment_history' %}" class="secondary-button">
+                Cancel
+            </a>
+
+            <button type="submit" class="primary-button">
+                Run Experiment
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,65 @@
+
+{% extends "dashboard_app/base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Upload Dataset</h1>
+        <p class="page-description">
+            Import your data into LLMForge Studio for preprocessing experiments.
+        </p>
+    </div>
+</div>
+
+<div class="content-card upload-card">
+
+    <div class="section-heading">
+        <h2>Dataset Information</h2>
+        <p>Provide the details of your dataset.</p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="{{ form.name.id_for_label }}">Dataset Name</label>
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.description.id_for_label }}">Description</label>
+            {{ form.description }}
+            {{ form.description.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.file_format.id_for_label }}">File Format</label>
+            {{ form.file_format }}
+            {{ form.file_format.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.source_file.id_for_label }}">Dataset File</label>
+            {{ form.source_file }}
+            {{ form.source_file.errors }}
+            <small>Supported formats: TXT, JSON, JSONL, CSV</small>
+        </div>
+
+        <button type="submit" class="primary-button">
+            Upload Dataset
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}

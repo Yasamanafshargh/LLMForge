@@ -1,0 +1,283 @@
+
+{% extends "dashboard_app/base.html" %}
+{% load static %}
+{% block title %}Pipeline Explorer | LLMForge Studio{% endblock %}
+{% block page_name %}Pipeline Explorer{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">PIPELINE INSPECTION</span>
+        <h1>Pipeline Explorer</h1>
+        <p>Explore the architecture and operations of the LLMForge preprocessing pipeline.</p>
+    </div>
+    <div class="version-tag">CORE ENGINE · v0.1.0</div>
+</div>
+
+<!-- Pipeline Overview -->
+<div class="content-panel pipeline-overview">
+    <div class="panel-heading">
+        <div>
+            <h2>Processing Workflow</h2>
+            <p>Select a stage to inspect its implementation.</p>
+        </div>
+        <span class="stage-count">7 PROCESSING STAGES</span>
+    </div>
+
+    <div class="explorer-flow">
+        <button class="explorer-stage active" data-stage="ingestion">
+            <span class="explorer-stage-number">01</span>
+            <strong>Ingestion</strong>
+            <small>Load data</small>
+        </button>
+
+        <span class="flow-connector"></span>
+
+        <button class="explorer-stage" data-stage="normalization">
+            <span class="explorer-stage-number">02</span>
+            <strong>Normalization</strong>
+            <small>Clean text</small>
+        </button>
+
+        <span class="flow-connector"></span>
+
+        <button class="explorer-stage" data-stage="chunking">
+            <span class="explorer-stage-number">03</span>
+            <strong>Chunking</strong>
+            <small>Split text</small>
+        </button>
+
+        <span class="flow-connector"></span>
+
+        <button class="explorer-stage" data-stage="tokenization">
+            <span class="explorer-stage-number">04</span>
+            <strong>Tokenization</strong>
+            <small>Create tokens</small>
+        </button>
+
+        <span class="flow-connector"></span>
+
+        <button class="explorer-stage" data-stage="encoding">
+            <span class="explorer-stage-number">05</span>
+            <strong>Encoding</strong>
+            <small>Token IDs</small>
+        </button>
+
+        <span class="flow-connector"></span>
+
+        <button class="explorer-stage" data-stage="batching">
+            <span class="explorer-stage-number">06</span>
+            <strong>Batching</strong>
+            <small>Pad sequences</small>
+        </button>
+
+        <span class="flow-connector"></span>
+
+        <button class="explorer-stage" data-stage="dataset">
+            <span class="explorer-stage-number">07</span>
+            <strong>Dataset</strong>
+            <small>Split data</small>
+        </button>
+    </div>
+</div>
+
+
+<!-- Live Normalization Demo -->
+<div class="content-panel normalization-demo">
+    <div class="panel-heading">
+        <div>
+            <span class="eyebrow">LIVE CORE EXECUTION</span>
+            <h2>Text Normalization Playground</h2>
+            <p>Enter text and execute the actual LLMForge normalization pipeline.</p>
+        </div>
+        <span class="stage-status">LIVE EXECUTION</span>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="input_text">Input Text</label>
+        <textarea
+            id="input_text"
+            name="input_text"
+            rows="5"
+            placeholder="Enter Persian or English text..."
+        >{{ input_text }}</textarea>
+
+        <button type="submit" class="primary-button">
+            Run Normalization
+        </button>
+    </form>
+
+    {% if normalized_text != None %}
+        <div class="normalization-results">
+            <div class="result-card">
+                <h3>Original Text</h3>
+                <p dir="auto">{{ input_text }}</p>
+            </div>
+
+            <div class="result-card">
+                <h3>Normalized Text</h3>
+                <p dir="auto">{{ normalized_text }}</p>
+            </div>
+
+            <div class="normalization-config">
+                <div class="config-heading">
+                    <h3>Normalization Configuration</h3>
+                    <span>ACTIVE SETTINGS</span>
+                </div>
+            
+                <div class="normalization-config-grid">
+                    {% for setting, enabled in normalization_config.items %}
+                        <div class="normalization-config-item">
+                            <span>{{ setting }}</span>
+            
+                            {% if enabled %}
+                                <strong class="config-enabled">Enabled</strong>
+                            {% else %}
+                                <strong class="config-disabled">Disabled</strong>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="execution-metadata">
+                <div>
+                    <span>Status</span>
+                    <strong>{{ execution_status }}</strong>
+                </div>
+                <div>
+                    <span>Execution Time</span>
+                    <strong>{{ execution_time }} ms</strong>
+                </div>
+            </div>
+
+            <div class="trace-result">
+                <h3>Pipeline Execution Trace</h3>
+                <pre>{{ trace_json }}</pre>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+
+<!-- Stage Details -->
+<div class="explorer-details">
+
+    <div class="content-panel stage-information">
+        <span class="eyebrow">SELECTED COMPONENT</span>
+        <div class="stage-title-row">
+            <div>
+                <h2 id="stage-title">Data Ingestion</h2>
+                <p id="stage-description">Load and convert raw data sources into standardized Document objects.</p>
+            </div>
+            <span class="stage-status">IMPLEMENTED</span>
+        </div>
+
+        <div class="detail-divider"></div>
+
+        <h3>Responsibilities</h3>
+        <ul id="stage-responsibilities" class="responsibility-list">
+            <li>Read raw text files and structured datasets.</li>
+            <li>Validate the source data.</li>
+            <li>Convert records into Document objects.</li>
+            <li>Preserve source metadata.</li>
+        </ul>
+
+        <div class="detail-divider"></div>
+
+        <h3>Implementation</h3>
+        <div class="implementation-box">
+            <span>PYTHON MODULE</span>
+            <code id="stage-module">llmforge.ingestion</code>
+        </div>
+    </div>
+
+
+    <div class="content-panel stage-configuration">
+        <div class="panel-heading">
+            <div>
+                <h2>Stage Configuration</h2>
+                <p>Parameters and implementation settings</p>
+            </div>
+        </div>
+
+        <div id="stage-config" class="config-list">
+            <div class="config-row">
+                <span>Supported formats</span>
+                <strong>TXT, JSON, JSONL, CSV</strong>
+            </div>
+            <div class="config-row">
+                <span>Output type</span>
+                <strong>Document</strong>
+            </div>
+            <div class="config-row">
+                <span>Validation</span>
+                <strong>Enabled</strong>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Input / Output -->
+<div class="section-heading explorer-section-heading">
+    <div>
+        <h2>Data Transformation</h2>
+        <p>Conceptual view of the selected stage's input and output.</p>
+    </div>
+</div>
+
+<div class="transformation-grid">
+
+    <div class="content-panel">
+        <div class="code-panel-heading">
+            <div>
+                <span class="code-dot input-dot"></span>
+                <strong>Input</strong>
+            </div>
+            <span>RAW DATA</span>
+        </div>
+
+        <pre id="stage-input">{
+  "source": "sample.txt",
+  "format": "txt",
+  "content": "سلام دنیا. این یک متن نمونه است."
+}</pre>
+    </div>
+
+    <div class="transformation-arrow">→</div>
+
+    <div class="content-panel">
+        <div class="code-panel-heading">
+            <div>
+                <span class="code-dot output-dot"></span>
+                <strong>Output</strong>
+            </div>
+            <span>DOCUMENT</span>
+        </div>
+
+        <pre id="stage-output">{
+  "id": "document_001",
+  "text": "سلام دنیا. این یک متن نمونه است.",
+  "metadata": {
+    "format": "txt"
+  }
+}</pre>
+    </div>
+
+</div>
+
+<div class="demo-notice">
+    <strong>Illustrative examples</strong>
+    <span>
+        These examples explain the expected data flow. They are not live execution results.
+        Actual inputs, outputs and timings will be connected to LLMForge Core traces.
+    </span>
+</div>
+
+<script src="{% static 'dashboard_app/js/pipeline_explorer.js' %}"></script>
+{% endblock %}

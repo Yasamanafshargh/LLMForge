@@ -1,0 +1,70 @@
+
+{% extends "dashboard_app/base.html" %}
+
+{% block title %}Experiment History | LLMForge Studio{% endblock %}
+
+{% block page_name %}Experiment History{% endblock %}
+
+{% block content %}
+
+<div class="page-heading experiment-page-header">
+    <div>
+        <h1>Experiment History</h1>
+        <p>Review previous pipeline executions and their results.</p>
+    </div>
+
+    <a href="{% url 'run_experiment' %}" class="primary-button">
+        + Run New Experiment
+    </a>
+</div>
+
+<div class="experiment-table-container">
+
+    <table class="experiment-table">
+        <thead>
+            <tr>
+                <th>Experiment</th>
+                <th>Dataset</th>
+                <th>Status</th>
+                <th>Input Documents</th>
+                <th>Output Documents</th>
+                <th>Duration</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for experiment in experiments %}
+            <tr>
+                <td>{{ experiment.name }}</td>
+                <td>{{ experiment.dataset.name }}</td>
+                <td>
+                    <span class="experiment-status status-{{ experiment.status }}">
+                        {{ experiment.get_status_display }}
+                    </span>
+                </td>
+                <td>{{ experiment.input_count }}</td>
+                <td>{{ experiment.output_count }}</td>
+                <td>{{ experiment.total_duration_ms|floatformat:2 }} ms</td>
+                <td>{{ experiment.created_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                    <a href="{% url 'experiment_detail' experiment.id %}" class="text-link">
+                        View Results →
+                    </a>
+                </td>
+            </tr>
+
+            {% empty %}
+            <tr>
+                <td colspan="7" class="8">
+                    No experiments have been executed yet.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,254 @@
+
+{% extends "dashboard_app/base.html" %}
+
+{% block title %}Dashboard | LLMForge Studio{% endblock %}
+{% block page_name %}Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Page Heading -->
+<div class="page-heading">
+    <div>
+        <span class="eyebrow">PROJECT OVERVIEW</span>
+        <h1>Research Dashboard</h1>
+        <p>
+            Monitor your LLM preprocessing framework
+            and explore its development.
+        </p>
+    </div>
+
+    <div class="version-tag">
+        <span class="version-dot"></span>
+        LLMForge v0.1.0
+    </div>
+</div>
+
+
+<!-- Overview Cards -->
+<div class="overview-grid">
+
+    <div class="overview-card">
+        <div class="card-top">
+            <span class="card-label">Framework</span>
+            <span class="card-icon orange">◈</span>
+        </div>
+        <h2>LLMForge Core</h2>
+        <p>Modular preprocessing engine</p>
+        <span class="card-status">Development</span>
+    </div>
+
+    <div class="overview-card">
+        <div class="card-top">
+            <span class="card-label">Architecture</span>
+            <span class="card-icon blue">⌘</span>
+        </div>
+        <h2>Modular Pipeline</h2>
+        <p>Independent processing stages</p>
+        <span class="card-status">Implemented</span>
+    </div>
+
+    <div class="overview-card">
+        <div class="card-top">
+            <span class="card-label">Language Support</span>
+            <span class="card-icon purple">文</span>
+        </div>
+        <h2>Persian + English</h2>
+        <p>Multilingual text processing</p>
+        <span class="card-status">Implemented</span>
+    </div>
+
+    <div class="overview-card">
+        <div class="card-top">
+            <span class="card-label">Tokenizer</span>
+            <span class="card-icon green">⌗</span>
+        </div>
+        <h2>BPE</h2>
+        <p>Custom tokenizer implementation</p>
+        <span class="card-status">Development</span>
+    </div>
+
+</div>
+
+
+<!-- Pipeline Section -->
+<div class="section-heading">
+    <div>
+        <h2>Preprocessing Pipeline</h2>
+        <p>Overview of the framework architecture</p>
+    </div>
+
+    <a href="#" class="text-link">Explore Pipeline →</a>
+</div>
+
+
+<div class="pipeline-card">
+
+    <div class="pipeline-step">
+        <div class="pipeline-number">01</div>
+        <div>
+            <h3>Data Ingestion</h3>
+            <p>TXT · JSON · JSONL · CSV</p>
+        </div>
+    </div>
+
+    <div class="pipeline-arrow">→</div>
+
+    <div class="pipeline-step">
+        <div class="pipeline-number">02</div>
+        <div>
+            <h3>Normalization</h3>
+            <p>Unicode · Persian text</p>
+        </div>
+    </div>
+
+    <div class="pipeline-arrow">→</div>
+
+    <div class="pipeline-step">
+        <div class="pipeline-number">03</div>
+        <div>
+            <h3>Chunking</h3>
+            <p>Sentence segmentation</p>
+        </div>
+    </div>
+
+    <div class="pipeline-arrow">→</div>
+
+    <div class="pipeline-step">
+        <div class="pipeline-number">04</div>
+        <div>
+            <h3>Tokenization</h3>
+            <p>Word · Basic · BPE</p>
+        </div>
+    </div>
+
+    <div class="pipeline-arrow">→</div>
+
+    <div class="pipeline-step">
+        <div class="pipeline-number">05</div>
+        <div>
+            <h3>Encoding</h3>
+            <p>Token IDs · Padding</p>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Bottom Sections -->
+<div class="bottom-grid">
+
+    <div class="content-panel">
+        <div class="panel-heading">
+            <div>
+                <h2>Core Components</h2>
+                <p>Implemented framework modules</p>
+            </div>
+        </div>
+
+        <div class="component-list">
+
+            <div class="component-item">
+                <span class="component-indicator"></span>
+                <div>
+                    <strong>Data Ingestion</strong>
+                    <small>Multiple file formats</small>
+                </div>
+                <span class="component-label">Ready</span>
+            </div>
+
+            <div class="component-item">
+                <span class="component-indicator"></span>
+                <div>
+                    <strong>Text Normalization</strong>
+                    <small>Persian-aware processing</small>
+                </div>
+                <span class="component-label">Ready</span>
+            </div>
+
+            <div class="component-item">
+                <span class="component-indicator"></span>
+                <div>
+                    <strong>Text Chunking</strong>
+                    <small>Sentence-based segmentation</small>
+                </div>
+                <span class="component-label">Ready</span>
+            </div>
+
+            <div class="component-item">
+                <span class="component-indicator"></span>
+                <div>
+                    <strong>Tokenization & BPE</strong>
+                    <small>Custom tokenizer architecture</small>
+                </div>
+                <span class="component-label">Ready</span>
+            </div>
+
+            <div class="component-item">
+                <span class="component-indicator"></span>
+                <div>
+                    <strong>Training Preparation</strong>
+                    <small>Sequences and batch collation</small>
+                </div>
+                <span class="component-label">Ready</span>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="content-panel">
+        <div class="panel-heading">
+            <div>
+                <h2>Development Roadmap</h2>
+                <p>Research and implementation stages</p>
+            </div>
+        </div>
+
+        <div class="roadmap">
+
+            <div class="roadmap-item completed">
+                <span class="roadmap-marker"></span>
+                <div>
+                    <strong>Preprocessing Core</strong>
+                    <small>Implemented and tested</small>
+                </div>
+            </div>
+
+            <div class="roadmap-item current">
+                <span class="roadmap-marker"></span>
+                <div>
+                    <strong>Studio Interface</strong>
+                    <small>Currently in development</small>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <span class="roadmap-marker"></span>
+                <div>
+                    <strong>Experiment Tracking</strong>
+                    <small>Planned</small>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <span class="roadmap-marker"></span>
+                <div>
+                    <strong>Transformer Architecture</strong>
+                    <small>Future development</small>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <span class="roadmap-marker"></span>
+                <div>
+                    <strong>Model Training & Inference</strong>
+                    <small>Future development</small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

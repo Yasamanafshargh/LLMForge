@@ -1,0 +1,171 @@
+
+{% extends "dashboard_app/base.html" %}
+
+{% block title %}Experiment Results | LLMForge Studio{% endblock %}
+{% block page_name %}Experiment Results{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'experiment_history' %}" class="back-link">
+    ← Back to Experiments
+</a>
+
+<div class="page-heading">
+    <div>
+        <h1>{{ experiment.name }}</h1>
+        <p>Pipeline execution results and processed documents.</p>
+    </div>
+    <span class="experiment-status status-{{ experiment.status }}">
+        {{ experiment.get_status_display }}
+    </span>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span>Dataset</span>
+        <h2>{{ experiment.dataset.name }}</h2>
+    </div>
+    <div class="stat-card">
+        <span>Input Documents</span>
+        <h2>{{ experiment.input_count }}</h2>
+    </div>
+    <div class="stat-card">
+        <span>Output Documents</span>
+        <h2>{{ experiment.output_count }}</h2>
+    </div>
+    <div class="stat-card">
+        <span>Execution Time</span>
+        <h2>{{ experiment.total_duration_ms|floatformat:2 }} ms</h2>
+    </div>
+</div>
+
+<h2 class="section-title">Pipeline Execution</h2>
+<div class="pipeline-workflow">
+
+    {% for stage in stage_executions %}
+
+        <div class="workflow-stage">
+
+            <div class="workflow-node status-{{ stage.status }}">
+                {% if stage.status == "completed" %}
+                    ✓
+                {% elif stage.status == "failed" %}
+                    ✕
+                {% else %}
+                    {{ forloop.counter }}
+                {% endif %}
+            </div>
+
+            <div class="workflow-stage-info">
+                <h4>{{ stage.stage_name }}</h4>
+                <span>{{ stage.duration_ms|floatformat:2 }} ms</span>
+                <small>{{ stage.status|title }}</small>
+            </div>
+
+        </div>
+
+        {% if not forloop.last %}
+            <div class="workflow-connector"></div>
+        {% endif %}
+
+    {% endfor %}
+
+</div>
+
+
+
+{% for stage in stage_executions %}
+
+<div class="content-card stage-result-card">
+
+    <div class="stage-result-header">
+        <div>
+            <span class="stage-number">STAGE {{ stage.order|add:1 }}</span>
+            <h3>{{ stage.stage_name }}</h3>
+            <p>{{ stage.stage_type|title }} Stage</p>
+        </div>
+
+        <div class="stage-result-meta">
+            <span class="experiment-status status-{{ stage.status }}">
+                {{ stage.status|title }}
+            </span>
+            <span>{{ stage.duration_ms|floatformat:2 }} ms</span>
+        </div>
+    </div>
+
+    {% if stage.error %}
+        <p class="error-text">{{ stage.error }}</p>
+    {% endif %}
+
+    <div class="stage-table-wrapper">
+        <table class="stage-results-table">
+            <thead>
+                <tr>
+                    <th>Document</th>
+                    <th>Processed Text</th>
+                    {% if stage.stage_name == "TokenEncodingStage" %}
+                        <th>Tokens</th>
+                        <th>Token IDs</th>
+                    {% endif %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for document in stage.output_documents %}
+                <tr>
+                    <td>
+                        <span class="document-number">
+                            {{ forloop.counter }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="result-text" dir="auto">
+                            {{ document.text }}
+                        </div>
+                    </td>
+                    {% if stage.stage_name == "TokenEncodingStage" %}
+
+                    <td>
+                        <div class="token-list" dir="ltr">
+                            {% for token in document.tokens %}
+                                <span class="token-chip" dir="auto">
+                                    <small>{{ forloop.counter0 }}</small>
+                                    {{ token }}
+                                </span>
+                            {% empty %}
+                                <span class="empty-result">No tokens available</span>
+                            {% endfor %}
+                        </div>
+                    </td>
+                    
+                    <td>
+                        <div class="id-list" dir="ltr">
+                            {% for token_id in document.token_ids %}
+                                <span class="id-chip">{{ token_id }}</span>
+                            {% empty %}
+                                <span class="empty-result">No IDs available</span>
+                            {% endfor %}
+                        </div>
+                    </td>
+                    
+                    {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No output documents available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% empty %}
+<div class="content-card">
+    <p>No stage execution records were found.</p>
+</div>
+{% endfor %}
+
+{% endblock %}

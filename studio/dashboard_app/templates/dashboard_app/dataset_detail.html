@@ -1,0 +1,207 @@
+
+{% extends "dashboard_app/base.html" %}
+
+{% block content %}
+
+
+<div class="page-header">
+    <div>
+        <a href="{% url 'dataset_list' %}" class="back-link">
+            ← Back to Datasets
+        </a>
+
+        <h1>{{ dataset.name }}</h1>
+        <p class="page-description">
+            Dataset inspection and document overview
+        </p>
+    </div>
+    <span class="status-badge">Loaded</span>
+</div>
+
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <span class="stat-label">Documents Loaded</span>
+        <h2>{{ document_results|length }}</h2>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-label">Total Tokens</span>
+        <h2>{{ total_tokens }}</h2>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-label">Total Stop Words</span>
+        <h2>{{ total_stop_words }}</h2>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-label">Stop Word Percentage</span>
+        <h2>{{ stop_word_percentage }}%</h2>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-label">File Format</span>
+        <h2>{{ dataset.file_format|upper }}</h2>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-label">Dataset ID</span>
+        <h2>#{{ dataset.id }}</h2>
+    </div>
+
+</div>
+
+
+
+    <div class="content-card">
+        <div class="section-heading">
+            <h2>Dataset Stop Word Analysis</h2>
+            <p>The most frequent stop words across all documents.</p>
+        </div>
+    
+        {% if top_stop_words %}
+            <div class="frequency-chart-container">
+                <canvas id="stopWordChart"></canvas>
+            </div>
+    
+            <div class="frequency-list">
+                {% for word, count in top_stop_words %}
+                    <div class="frequency-row">
+                        <div class="frequency-word">
+                            <span>{{ forloop.counter }}</span>
+                            <strong>{{ word }}</strong>
+                        </div>
+    
+                        <strong class="frequency-count">{{ count }}</strong>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No stop words found in this dataset.</p>
+        {% endif %}
+    </div>
+    
+    
+</div>
+
+
+<div class="content-card">
+    <div class="section-heading">
+        <h2>Document Explorer</h2>
+        <p>Documents loaded from the original dataset through LLMForge Core.</p>
+    </div>
+
+    {% for item in document_results %}
+
+        <div class="document-card">
+
+            <div class="document-header">
+                <strong>Document {{ forloop.counter }}</strong>
+                <span>ID: {{ item.document.id }}</span>
+            </div>
+
+            <div class="document-content">
+                {{ item.document.text|truncatechars:1000 }}
+            </div>
+
+            <div class="document-footer">
+                Characters: {{ item.document.text|length }}
+            </div>
+
+            <div class="stopword-panel">
+
+                <h3>Stop Word Analysis</h3>
+
+                <div class="stopword-stats">
+                    <div>
+                        <span>Total Tokens</span>
+                        <strong>{{ item.analysis.total_tokens }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Stop Words</span>
+                        <strong>{{ item.analysis.stop_word_count }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Percentage</span>
+                        <strong>{{ item.analysis.stop_word_percentage }}%</strong>
+                    </div>
+                </div>
+
+                <h4>Word Frequencies</h4>
+
+                {% for word, count in item.frequencies %}
+                    <div class="stopword-row">
+                        <span>{{ word }}</span>
+                        <strong>{{ count }}</strong>
+                    </div>
+                {% empty %}
+                    <p>No stop words found in this document.</p>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    {% empty %}
+        <p>No documents were found in this dataset.</p>
+    {% endfor %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const stopWordLabels = [
+        {% for word, count in top_stop_words %}
+            "{{ word|escapejs }}",
+        {% endfor %}
+    ];
+
+    const stopWordValues = [
+        {% for word, count in top_stop_words %}
+            {{ count }},
+        {% endfor %}
+    ];
+
+    const chartCanvas = document.getElementById("stopWordChart");
+
+    if (chartCanvas && stopWordLabels.length > 0) {
+        new Chart(chartCanvas, {
+            type: "bar",
+            data: {
+                labels: stopWordLabels,
+                datasets: [{
+                    label: "Frequency",
+                    data: stopWordValues,
+                    backgroundColor: "#e98522",
+                    borderRadius: 6,
+                    barThickness: 24
+                }]
+            },
+            options: {
+                indexAxis: "y",
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+{% endblock %}

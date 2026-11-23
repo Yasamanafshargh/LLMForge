@@ -1,0 +1,36 @@
+{
+    "merges": [
+        [
+            "a",
+            "n"
+        ],
+        [
+            "b",
+            "an"
+        ],
+        [
+            "an",
+            "a"
+        ]
+    ],
+    "vocabulary": [
+        "[PAD]",
+        "[UNK]",
+        "[BOS]",
+        "[EOS]",
+        "ban",
+        "ana",
+        "d"
+    ],
+    "special_tokens": [
+        "[PAD]",
+        "[UNK]",
+        "[BOS]",
+        "[EOS]"
+    ],
+    "config": {
+        "algorithm": "BPE",
+        "num_merges": 3,
+        "pre_tokenization": "word"
+    }
+}

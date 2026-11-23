@@ -1,0 +1,106 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}LLMForge Studio{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'dashboard_app/css/style.css' %}">
+</head>
+<body>
+
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">L</div>
+                <div class="brand-text">
+                    <h2>LLMForge</h2>
+                    <span>STUDIO</span>
+                </div>
+            </div>
+
+
+            <div class="nav-section">
+                <span class="nav-label">WORKSPACE</span>
+            
+                <a href="{% url 'dashboard' %}"
+                    class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <span class="nav-icon">◫</span>
+                    <span>Dashboard</span>
+                </a>
+            
+                <a href="{% url 'dataset_list' %}"
+                    class="nav-item {% if request.resolver_match.url_name == 'dataset_list' or request.resolver_match.url_name == 'dataset_detail' or request.resolver_match.url_name == 'dataset_upload' %}active{% endif %}">
+                    <span class="nav-icon">▤</span>
+                    <span>Dataset Explorer</span>
+                </a>
+            
+                <a href="{% url 'pipeline_explorer' %}"
+                    class="nav-item {% if request.resolver_match.url_name == 'pipeline_explorer' %}active{% endif %}">
+                    <span class="nav-icon">⌘</span>
+                    <span>Pipeline Explorer</span>
+                </a>
+            
+                <a href="{% url 'experiment_history' %}"
+                    class="nav-item {% if request.resolver_match.url_name == 'experiment_history' %}active{% endif %}">
+                    <span class="nav-icon">◷</span>
+                    <span>Experiment History</span>
+                </a>
+            
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">⌗</span>
+                    <span>Tokenizer Lab</span>
+                </a>
+            </div>
+            
+            <div class="sidebar-bottom">
+                <div class="project-status">
+                    <span class="status-dot"></span>
+                    <div>
+                        <strong>Core Engine</strong>
+                        <small>Development mode</small>
+                    </div>
+                </div>
+
+                <div class="sidebar-footer">
+                    LLMForge v0.1.0
+                </div>
+            </div>
+
+        </aside>
+
+
+        <!-- Main Area -->
+        <main class="main-area">
+
+            <header class="topbar">
+                <div class="breadcrumb">
+                    <span>LLMForge</span>
+                    <span class="breadcrumb-divider">/</span>
+                    <strong>{% block page_name %}Dashboard{% endblock %}</strong>
+                </div>
+
+                <div class="topbar-right">
+                    <span class="environment-badge">RESEARCH ENVIRONMENT</span>
+                    <div class="user-avatar">R</div>
+                </div>
+            </header>
+
+
+            <section class="page-content">
+                {% block content %}
+                {% endblock %}
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>
